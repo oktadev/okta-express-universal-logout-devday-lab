@@ -29,14 +29,7 @@ export const Todos = () => {
           body: JSON.stringify({ task: newTask })
         });
 
-        if (!res.ok)
-          {if (res.status === 401) {
-            // Redirect user back to the sign-in page
-            window.location.href = '/';
-            } else {
-            // Handle other errors
-            throw new Error('Error occurred while fetching data');
-          }}  
+        // Add your code here to redirect user back to login
 
         const todo = await res.json();
         setTodoList([...todoList, todo]);
