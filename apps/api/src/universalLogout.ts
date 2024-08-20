@@ -19,7 +19,7 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   }
 
   // Find the user by email linked to the org id associated with the API key provided
-  const domainOrgId = req['user']['id']
+  const domainOrgId = req['user']['id'];
   const newRequest:IRequestSchema = req.body;
   const { email } = newRequest.sub_id;
   const user = await prisma.user.findFirst({
