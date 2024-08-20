@@ -45,7 +45,9 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
     }
   });
 
-  sids.map((sid) => store.destroy(sid));
+  for (const sid of sids) {
+    store.destroy(sid);
+  }
   console.log('User session deleted')
   return res.sendStatus(httpStatus);
 });
