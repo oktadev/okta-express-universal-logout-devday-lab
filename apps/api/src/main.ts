@@ -4,6 +4,12 @@ import passportLocal from 'passport-local';
 import passportOIDC from 'passport-openidconnect';
 import passport from 'passport';
 import session from 'express-session';
+import { universalLogoutRoute } from './universalLogout';
+import morgan from 'morgan';
+import { store }  from './sessionStore';
+
+// Bearer Auth - Universal Logout
+import passportBearer from 'passport-http-bearer';
 
 interface IUser {
   id: number;
@@ -12,6 +18,9 @@ interface IUser {
 const prisma = new PrismaClient();
 const LocalStrategy = passportLocal.Strategy;
 const OpenIDConnectStrategy = passportOIDC.Strategy;
+
+// Bearer Auth - Universal Logout
+const BearerStrategy = passportBearer.Strategy;
 
 const app = express();
 app.use(express.json())
@@ -22,7 +31,8 @@ app.use(session({
   cookie: {
     http: false,
     sameSite: 'lax'
-  }
+  },
+  store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,7 +53,7 @@ app.use('/api/users', (req, res, next) => {
 
 passport.use(new LocalStrategy(async (username, password, done) => {
     const user = await prisma.user.findFirst({
-      where: { 
+      where: {
         AND: {
           email: username,
           password
@@ -61,7 +71,7 @@ passport.serializeUser( async (user: IUser, done) => {
 
 passport.deserializeUser( async (id: number, done) => {
   const user: User = await prisma.user.findUnique({
-    where: { 
+    where: {
      id
     }
   });
@@ -80,7 +90,6 @@ app.post('/api/signout', async (req, res, next) => {
     if (err) { return next(err)};
     res.sendStatus(204);
   });
-  
 });
 
 app.get('/api/users/me', async (req, res) => {
@@ -294,6 +303,27 @@ app.get('/openid/callback/:id', async (req, res, next) => {
   })(req, res, next);
 
 });
+
+///////////////////////////////////////////////////////
+// Universal Logout Route
+
+// Bearer Auth Strategy
+passport.use(new BearerStrategy(
+  async (apikey, done) => {
+    const org = await prisma.org.findFirst({
+      where: {
+        apikey: apikey
+      }
+    });
+    return done(null, org);
+  }
+ ));
+
+app.use(morgan('combined'));
+
+app.use('/', passport.authenticate('bearer', { session: false }), universalLogoutRoute);
+
+
 
 
 
