@@ -19,8 +19,11 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   }
 
   // Find the user by email linked to the org id associated with the API key provided
-
+  const domainOrgId = req['user']['id'];
+  const newRequest:IRequestSchema = req.body;
+  const { email } = newRequest.sub_id;
   // Add your code here to find user by email and org id
+  
 
   // 404 User not found
   // if (!user) {
@@ -39,7 +42,6 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   // });
 
   // Add your code here to end a user's session
-
 
   return res.sendStatus(httpStatus);
 });
