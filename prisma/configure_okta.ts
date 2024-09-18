@@ -32,11 +32,10 @@ const result = await prisma.org.update({
     token_endpoint: issuer + "oauth2/v1/token",
     userinfo_endpoint: issuer + "oauth2/v1/userinfo",
     }
-})
+  })
 
-console.log("Successfully updated the DB")
+  console.log("Successfully updated the DB")
 }
-
 
 main()
   .then(async () => {
