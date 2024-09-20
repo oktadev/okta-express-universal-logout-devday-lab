@@ -22,17 +22,17 @@ async function main() {
     throw 'Org not found'
   }
 
-const result = await prisma.org.update({
-  where: {
-      id: orgId
-    },
-  data: {
-    issuer: issuer,
-    authorization_endpoint: issuer + "/oauth2/v1/authorize",
-    token_endpoint: issuer + "/oauth2/v1/token",
-    userinfo_endpoint: issuer + "/oauth2/v1/userinfo",
-    }
-  })
+  const result = await prisma.org.update({
+    where: {
+        id: orgId
+      },
+    data: {
+      issuer: issuer,
+      authorization_endpoint: issuer + "/oauth2/v1/authorize",
+      token_endpoint: issuer + "/oauth2/v1/token",
+      userinfo_endpoint: issuer + "/oauth2/v1/userinfo",
+      }
+    })
 
   console.log("Successfully updated the DB")
 }
