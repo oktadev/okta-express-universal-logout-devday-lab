@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from './authState';
 
-// custom react hook
 import { useTodoApi } from './useTodoApi'
 interface ITodo {
   id: number;
@@ -15,7 +14,6 @@ export const Todos = () => {
   const [newTask, setNewTask] = useState<string>('');
   const { authState } = useAuthState();
   const navigate = useNavigate();
-  // Demo 3
   const todoApi = useTodoApi();
   const API_BASE_URL = '/api/todos';
 

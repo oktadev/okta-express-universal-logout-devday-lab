@@ -24,7 +24,6 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   const { email } = newRequest.sub_id;
   // Add your code here to find user by email and org id
 
-
   // 404 User not found
   // if (!user) {
   //   res.sendStatus(404);
@@ -52,3 +51,15 @@ universalLogoutRoute.use((err,req,res,next) => {
     return res.sendStatus(404)
   }
 })
+
+// Sample request by an IdP to this endpoint
+//   curl --request POST \
+//   --url http://localhost:3333/global-token-revocation \
+//   --header 'Authorization: Bearer 131313' \
+//   --header 'Content-Type: application/json' \
+//   --data '{
+//   "sub_id": {
+//     "format": "email",
+//     "email": "trinity@whiterabbit.fake"
+//   }
+// }'
