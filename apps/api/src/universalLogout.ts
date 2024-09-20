@@ -23,7 +23,7 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   const newRequest:IRequestSchema = req.body;
   const { email } = newRequest.sub_id;
   // Add your code here to find user by email and org id
-  
+
 
   // 404 User not found
   // if (!user) {
