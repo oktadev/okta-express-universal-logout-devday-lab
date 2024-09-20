@@ -7,16 +7,8 @@ export const useTodoApi = () => {
     async function useApi(url: RequestInfo | URL, data = {}): Promise<Response> {
         const res = await fetch(url, data);
         if (!res.ok) {
-            if (res.status === 401) {
-                // Set user's authentication state to false
-                resetAuthState()
-                // Redirect user to login
-                navigate("/");
-            }
-            else {
-                // Handle other errors
-                throw new Error('Error occurred while fetching data');
-            }
+          // Handle other errors
+          throw new Error('Error occurred while fetching data');
         }
         return res
     }
