@@ -16,6 +16,7 @@ export type AuthContextType = {
   onAuthenticateFn: (username: string, password: string) => Promise<void>;
   onUsernameEnteredFn: (username: string) => Promise<number|null>;
   onRevokeAuthFn: () => Promise<void>;
+  resetAuthState: () => void;
 }
 
 const defaultAuthContext: AuthContextType = {
@@ -23,7 +24,8 @@ const defaultAuthContext: AuthContextType = {
   userIsAuthenticatedFn: async () => {},
   onAuthenticateFn: async () => {},
   onUsernameEnteredFn: async () => null,
-  onRevokeAuthFn: async () => {}
+  onRevokeAuthFn: async () => {},
+  resetAuthState: () => { }
 }
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
@@ -58,7 +60,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }) => {
       }
   }, [setAuthState]);
 
-  const onAuthenticateFn = async (username: string, password: string) => { 
+  const onAuthenticateFn = async (username: string, password: string) => {
     const url = `/api/signin`;
     try {
         const res = await fetch(url, {
@@ -105,7 +107,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }) => {
         const res = await fetch(url, {
           method: 'POST'
         });
-        
+
         setAuthState(defaultAuthState);
         localStorage.setItem('isAuthenticated', 'false');
       } catch (error: unknown) {
@@ -113,7 +115,12 @@ const AuthContextProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
-  return <AuthContext.Provider value={{ authState, onAuthenticateFn, onUsernameEnteredFn, onRevokeAuthFn, userIsAuthenticatedFn }}>{children}</AuthContext.Provider>;
+  const resetAuthState = () => {
+    setAuthState(defaultAuthState);
+    localStorage.setItem('isAuthenticated', 'false');
+  }
+
+  return <AuthContext.Provider value={{ authState, onAuthenticateFn, onUsernameEnteredFn, onRevokeAuthFn, userIsAuthenticatedFn, resetAuthState}}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvider;

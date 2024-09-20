@@ -24,6 +24,8 @@ const BearerStrategy = passportBearer.Strategy;
 
 const app = express();
 app.use(express.json())
+
+// Demo 2
 app.use(session({
   resave: false,
   saveUninitialized: false,
@@ -307,6 +309,7 @@ app.get('/openid/callback/:id', async (req, res, next) => {
 ///////////////////////////////////////////////////////
 // Universal Logout Route
 
+// Demo 1
 // Bearer Auth Strategy
 passport.use(new BearerStrategy(
   async (apikey, done) => {

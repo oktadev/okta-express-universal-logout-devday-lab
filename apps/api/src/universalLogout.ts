@@ -22,27 +22,33 @@ universalLogoutRoute.post('/global-token-revocation', async (req, res) => {
   const domainOrgId = req['user']['id'];
   const newRequest:IRequestSchema = req.body;
   const { email } = newRequest.sub_id;
-  // Add your code here to find user by email and org id
-  
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email,
+      org: { id: domainOrgId } ,
+    },
+  });
 
   // 404 User not found
-  // if (!user) {
-  //   res.sendStatus(404);
-  // }
+  if (!user) {
+    res.sendStatus(404);
+  }
 
   // End user session
-  // const storedSession = store.sessions;
-  // const userId = user.id;
-  // const sids = [];
-  // Object.keys(storedSession).forEach((key) => {
-  //   const sess = JSON.parse(storedSession[key]);
-  //   if (sess.passport.user === userId) {
-  //     sids.push(key);
-  //   }
-  // });
+  const storedSession = store.sessions;
+  const userId = user.id;
+  const sids = [];
+  Object.keys(storedSession).forEach((key) => {
+    const sess = JSON.parse(storedSession[key]);
+    if (sess.passport.user === userId) {
+      sids.push(key);
+    }
+  });
 
-  // Add your code here to end a user's session
-
+  for (const sid of sids) {
+    store.destroy(sid);
+  }
+  console.log('User session deleted')
   return res.sendStatus(httpStatus);
 });
 

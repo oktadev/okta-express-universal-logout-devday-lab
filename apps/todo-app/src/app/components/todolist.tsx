@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from './authState';
 
+// custom react hook
+import { useTodoApi } from './useTodoApi'
 interface ITodo {
   id: number;
   task: string;
@@ -13,13 +15,14 @@ export const Todos = () => {
   const [newTask, setNewTask] = useState<string>('');
   const { authState } = useAuthState();
   const navigate = useNavigate();
-
+  // Demo 3
+  const todoApi = useTodoApi();
   const API_BASE_URL = '/api/todos';
 
   const onNewTask = () => {
     const apiCall = async () => {
       try {
-        const res = await fetch(API_BASE_URL, {
+        const res = await todoApi(API_BASE_URL, {
           method: 'POST',
           credentials: 'same-origin',
           mode: 'same-origin',
@@ -28,9 +31,6 @@ export const Todos = () => {
           },
           body: JSON.stringify({ task: newTask })
         });
-
-        // Add your code here to redirect user back to login
-        
 
         const todo = await res.json();
         setTodoList([...todoList, todo]);
@@ -47,7 +47,7 @@ export const Todos = () => {
     const url = `${API_BASE_URL}/${todo.id}`;
     const apiCall = async () => {
       try {
-        const res = await fetch(url, {
+        const res = await todoApi(url, {
           method: 'PUT',
           credentials: 'same-origin',
           mode: 'same-origin',
@@ -72,7 +72,7 @@ export const Todos = () => {
 
     const apiCall = async () => {
       try {
-        await fetch(url, {
+        await todoApi(url, {
           method: 'DELETE',
           credentials: 'same-origin',
           mode: 'same-origin'
@@ -109,7 +109,7 @@ export const Todos = () => {
   useEffect(() => {
     const getTodos = async () => {
       try {
-        const response = await fetch(API_BASE_URL, {
+        const response = await todoApi(API_BASE_URL, {
           credentials: 'same-origin',
           mode: 'same-origin'
       });

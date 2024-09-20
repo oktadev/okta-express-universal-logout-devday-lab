@@ -28,9 +28,9 @@ const result = await prisma.org.update({
     },
   data: {
     issuer: issuer,
-    authorization_endpoint: issuer + "oauth2/v1/authorize",
-    token_endpoint: issuer + "oauth2/v1/token",
-    userinfo_endpoint: issuer + "oauth2/v1/userinfo",
+    authorization_endpoint: issuer + "/oauth2/v1/authorize",
+    token_endpoint: issuer + "/oauth2/v1/token",
+    userinfo_endpoint: issuer + "/oauth2/v1/userinfo",
     }
   })
 
