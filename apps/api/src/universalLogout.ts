@@ -52,7 +52,7 @@ universalLogoutRoute.use((err,req,res,next) => {
   }
 })
 
-// Sample request to this endpoint
+// Sample request by an IdP to this endpoint
 //   curl --request POST \
 //   --url http://localhost:3333/global-token-revocation \
 //   --header 'Authorization: Bearer 131313' \
